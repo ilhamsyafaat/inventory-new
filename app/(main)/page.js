@@ -130,7 +130,7 @@ const HomePage = () => {
               Explore Now
             </Link>
             <Link
-              href=""
+              href="/register/instructor"
               className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
             >
               Become An Instructor
