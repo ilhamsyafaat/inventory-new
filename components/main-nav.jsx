@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from './logo';
 import { cn } from '@/lib/utils';
 
@@ -10,11 +10,17 @@ import { Menu } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';  
 import MobileNav from './mobile-nav';
+import { useSession , signOut } from 'next-auth/react';
 
 const MainNav = ({items,children}) => {
-
+    const {data:session} = useSession();
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [loginSession, setLoginSession] = useState(null);
 
+    useEffect(() => {
+        console.log("Test information");
+        setLoginSession(session);
+    },[session]);
 
     
     return (
@@ -47,10 +53,15 @@ const MainNav = ({items,children}) => {
 </div>
 
 <nav className='flex items-center gap-3'>
-        <div className='items-center hidden gap-3 lg:flex'>
-            <Link href='/login' className={cn(buttonVariants({size: "sm"}), "px-4")}>
-                Login
-            </Link>
+{
+            !loginSession && (
+                <div className='items-center hidden gap-3 lg:flex'>
+                <Link href='/login' className={cn(buttonVariants({size: "sm"}), "px-4")}>
+                    Login
+                </Link>
+    
+
+    
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">Register</Button>
@@ -65,8 +76,12 @@ const MainNav = ({items,children}) => {
         </DropdownMenuContent>  
     </DropdownMenu> 
         </div>
+        )
+    }
+    
 
 
+    {loginSession && (
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <div className='cursor-pointer'>
@@ -88,12 +103,15 @@ const MainNav = ({items,children}) => {
             <Link href=''>Testimonials & Certificates</Link> 
         </DropdownMenuItem> 
         <DropdownMenuItem className="cursor-pointer" asChild>
-            <Link href=''>Logout</Link> 
+        <Link href='' onClick={(e) => {e.preventDefault(); signOut(); }} >Logout</Link> 
         </DropdownMenuItem> 
     </DropdownMenuContent>  
 
 
     </DropdownMenu>
+    )}
+
+
 
     <button className='flex items-center space-x-2 lg:hidden' onClick={() => setShowMobileMenu(!showMobileMenu)}>
         {showMobileMenu ? <X/> : <Menu/> } 

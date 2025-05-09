@@ -1,6 +1,7 @@
 import MainNav from '@/components/main-nav';
 import SiteFooter from '@/components/site-footer';
 import React from 'react';
+import { SessionProvider } from "next-auth/react";
 
 const navLinks = [
     { 
@@ -25,10 +26,13 @@ const navLinks = [
 const MainLayout = ({children}) => {
     return (
         <div className='flex flex-col min-h-screen'>
-    <header className='fixed top-0 left-0 right-0 z-40 border-b bg-background/60 backdrop-blur-md'>
-    <div className='container flex items-center justify-between h-20 py-6'>
+    <header className='z-40 bg-background/60 backdrop-blur-md fixed top-0 left-0 right-0 border-b'>
+
+    <SessionProvider>
+    <div className='container flex h-20 items-center justify-between py-6'>
         <MainNav items={navLinks} />
     </div>
+    </SessionProvider>
 
     </header>
     
